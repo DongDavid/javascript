@@ -88,21 +88,41 @@
                 callback(base64);
             }
         }
-		
-		var t = new DdvCompress({domOrigin:'origin',domCompress:'compress',quality:0.4});
+		var option = {
+			// 预览原始图片
+			// domOrigin:'origin',
+			// 预览压缩后的图片
+			// domCompress:'compress',
+			// 压缩比例 0-1
+			// quality:0.4,
+			// 上传文件名image
+			// formName:'image',
+			// 后台接口
+			url:'./upload.php',
+			// 上传成功的回调方法
+			uploadCallback:function (res) {
+				console.log(res);
+			}
+		};
+		var t = new DdvCompress(option);
 		window.onload = function () {
-			document.getElementById('customFile').addEventListener('change', function () {
+			// 这种只需要使用canvasDataURL方法就可以了
+			// document.getElementById('customFile').addEventListener('change', function () {
+			// 	var ready = new FileReader();
+		 //        ready.onload = function() {
+		 //            // 执行成功回调
+		 //            canvasDataURL(this.result,{},function (base64) {
+		 //            	$.post(url,{imageBase64:base64},function (res) {
+		 //            		console.log(res);
+		 //            	});
+		 //            })
+		 //        }
+		 //        ready.readAsDataURL(file);				
+			// });
+			// 调用插件
+			document.getElementById('customFile').addEventListener('change',function () {
 				t.fileToBase64(this.files[0]);
-				// var ready = new FileReader();
-				// ready.onload=function(){
-				// 	// 执行成功回调
-				// 	document.getElementById('origin').src=this.result;
-				// 	canvasDataURL(this.result,{},function(base64){
-				// 		document.getElementById('compress').src=base64;
-				// 	});
-				// }
-				// ready.readAsDataURL(this.files[0]);
-			});
+			})
 		}
 		
         
