@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<title>纯js图片压缩上传</title>
+	<meta name="description" content="纯js图片压缩上传">
+	<style type="text/css">
+		html,
+		body,
+		.container {
+			height: 100%;
+			width: 100%;
+		}
+
+		.img-box {
+			height: 200px;
+			width: 610px;
+			padding: 0;
+		}
+
+		.img-box img {
+			width: 200px;
+			height: 200px;
+			border: solid #DEE0E1 1px;
+			padding: 0;
+			margin: 0;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container d-flex justify-content-center">
+
+		<div class="row  align-self-center">
+			<div class="col-sm-12">
+
+				<div id="qrcode" class="img-box">
+					<img id="origin">
+					<img id="compress">
+					<img id="blob">
+				</div>
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" id="customFile">
+					<label class="custom-file-label" for="customFile">请选择文件</label>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<script src="./compress.js"></script>
+	<!-- <script src="./test.js"></script> -->
+	<script>
+		function canvasDataURL(path, obj, callback){
+            var img = new Image();
+            img.src = path;
+            img.onload = function(){
+                var that = this;
+                // 默认按比例压缩
+                var w = that.width,
+                    h = that.height,
+                    scale = w / h;
+                w = obj.width || w;
+                h = obj.height || (w / scale);
+                var quality = 0.7;  // 默认图片质量为0.7
+                //生成canvas
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                // 创建属性节点
+                var anw = document.createAttribute("width");
+                anw.nodeValue = w;
+                var anh = document.createAttribute("height");
+                anh.nodeValue = h;
+                canvas.setAttributeNode(anw);
+                canvas.setAttributeNode(anh);
+                ctx.drawImage(that, 0, 0, w, h);
+                // 图像质量
+                if(obj.quality && obj.quality <= 1 && obj.quality > 0){
+                    quality = obj.quality;
+                }
+                // quality值越小，所绘制出的图像越模糊
+                var base64 = canvas.toDataURL('image/jpeg', quality);
+                // 回调函数返回base64的值
+                callback(base64);
+            }
+        }
+		
+		var t = new DdvCompress({domOrigin:'origin',domCompress:'compress',quality:0.4});
+		window.onload = function () {
+			document.getElementById('customFile').addEventListener('change', function () {
+				t.fileToBase64(this.files[0]);
+				// var ready = new FileReader();
+				// ready.onload=function(){
+				// 	// 执行成功回调
+				// 	document.getElementById('origin').src=this.result;
+				// 	canvasDataURL(this.result,{},function(base64){
+				// 		document.getElementById('compress').src=base64;
+				// 	});
+				// }
+				// ready.readAsDataURL(this.files[0]);
+			});
+		}
+		
+        
+
+
+	</script>
+</body>
+
+</html>
