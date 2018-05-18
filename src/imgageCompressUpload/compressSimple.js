@@ -1,3 +1,6 @@
+/**
+ * 它得上promise 然而我还不会用0.0
+ */
 ;(function canvasDataURL(path, obj){
     
 })
@@ -21,11 +24,11 @@
         }
         return o;
     }
-
-    function CompressSimple(file,obj) {
-        this.compressSuccess = function(){};
-        this.compressError = function(){};
-        this.compressComplete = function(){};
+    var CompressSimple = function(file){
+        
+        return this.start(file);
+    }
+    CompressSimple.prototype.start = function(file){
         try {
             this.toDataURL(file);
         } catch (error) {
@@ -33,8 +36,20 @@
         }finally{
             this.compressComplete();
         }
-        return this;
     }
+    // function CompressSimple(file,obj) {
+    //     try {
+    //         this.toDataURL(file);
+    //     } catch (error) {
+    //         this.compressError(error);
+    //     }finally{
+    //         this.compressComplete();
+    //     }
+    //     return this;
+    // }
+    CompressSimple.prototype.compressSuccess = function(){};
+    CompressSimple.prototype.compressError = function(){};
+    CompressSimple.prototype.compressComplete = function(){};
     CompressSimple.prototype.toDataURL = function(file){
         // if(!file){
         //     throw "传入图片不能为空";
@@ -48,6 +63,7 @@
         ready.readAsDataURL(file);				
     }
     CompressSimple.prototype.compress = function(base64,obj){
+        throw "测试的exception";
         var _this = this;
         var img = new Image();
         img.src = base64;
